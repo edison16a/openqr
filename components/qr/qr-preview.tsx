@@ -36,7 +36,7 @@ export function QrPreview({ state, derived }: { state: GeneratorState; derived: 
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <div className="aspect-square w-full max-w-[380px] overflow-hidden rounded-frame border border-line bg-surface">
+      <div className="aspect-square w-full max-w-[380px] overflow-hidden min-[1088px]:max-w-[440px] rounded-frame border border-line bg-surface">
         {derived.status === "ready" ? (
           <QrSvg
             geometry={derived.geometry}
@@ -56,7 +56,7 @@ export function QrPreview({ state, derived }: { state: GeneratorState; derived: 
         )}
       </div>
       {warning && (
-        <p className="flex max-w-[380px] items-start gap-2 text-[13px] font-medium text-muted">
+        <p className="flex max-w-[380px] items-start gap-2 min-[1088px]:max-w-[440px] text-[13px] font-medium text-muted">
           <WarningIcon size={16} className="mt-0.5 shrink-0" />
           {warning}
         </p>
