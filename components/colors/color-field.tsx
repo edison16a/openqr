@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useId, useState } from "react";
+import { useId, useState } from "react";
 import { controlClasses, InlineMessage } from "@/components/ui/text-input";
 import { normalizeHex } from "@/lib/color/hex";
 
@@ -19,13 +19,13 @@ interface ColorFieldProps {
  */
 export function ColorField({ label, value, onChange }: ColorFieldProps) {
   const id = useId();
-  const [draft, setDraft] = useState(value);
-  const invalid = normalizeHex(draft) === null;
-
-  // Follow outside changes, like the native picker or loading a saved code.
-  // Leave the draft alone when it already means the same color, otherwise
-  // typing the short form "#abc" would be rewritten to "#AABBCC" under the cursor.
-  useEffect(() => setDraft((current) => (normalizeHex(current) === value ? current : value)), [value]);
+  // null means "show the real value". Text only lives in the draft while the
+  // field is being edited, so outside changes (the picker, loading a saved
+  // code) show up right away, and typing "#abc" is not rewritten to "#AABBCC"
+  // under the cursor.
+  const [draft, setDraft] = useState<string | null>(null);
+  const shown = draft ?? value;
+  const invalid = draft !== null && normalizeHex(draft) === null;
 
   return (
     <div className="flex flex-col gap-1.5">
@@ -37,13 +37,16 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
           type="color"
           aria-label={`${label} picker`}
           value={value.toLowerCase()}
-          onChange={(e) => onChange(e.target.value.toUpperCase())}
+          onChange={(e) => {
+            setDraft(null);
+            onChange(e.target.value.toUpperCase());
+          }}
           className="size-11 shrink-0 cursor-pointer"
         />
         <input
           id={`${id}-hex`}
           type="text"
-          value={draft}
+          value={shown}
           spellCheck={false}
           autoComplete="off"
           maxLength={7}
@@ -54,7 +57,7 @@ export function ColorField({ label, value, onChange }: ColorFieldProps) {
             const hex = normalizeHex(e.target.value);
             if (hex) onChange(hex);
           }}
-          onBlur={() => setDraft(value)}
+          onBlur={() => setDraft(null)}
           className={`${controlClasses} h-11 min-w-0 flex-1 font-medium uppercase tabular-nums`}
         />
       </div>
