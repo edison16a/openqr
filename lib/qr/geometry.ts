@@ -58,8 +58,10 @@ export function buildGeometry(matrix: QrMatrix, payload: string, withLogo: boole
   const size = matrix.size + QUIET_ZONE * 2;
   const path = modulesToPath(matrix);
   const plan = planLogo(payload);
+  // Only warn about long content when a logo is actually being squeezed.
+  const warning = withLogo ? plan.warning : null;
   if (!withLogo || plan.fraction === 0) {
-    return { size, path, plate: null, logo: null, warning: plan.warning };
+    return { size, path, plate: null, logo: null, warning };
   }
   const plateSize = matrix.size * plan.fraction;
   const padding = matrix.size * PLATE_PADDING;
@@ -76,6 +78,6 @@ export function buildGeometry(matrix: QrMatrix, payload: string, withLogo: boole
       size: logoSize,
       radius: Math.max(radius - padding, 0),
     },
-    warning: plan.warning,
+    warning,
   };
 }
