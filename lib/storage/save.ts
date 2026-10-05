@@ -2,13 +2,16 @@ import { blobToDataUrl } from "@/lib/image/data-url";
 import { deleteImage, getImage, putCode, putImage } from "./records";
 import type { LoadedCode, SavedCode } from "./types";
 
+/** Key of the one image a record owns. Derived from the id so it is easy to clean up. */
+export const imageKeyFor = (id: string) => `${id}-image`;
+
 /**
  * Writes a record and its image together. The image goes first so a record
  * never points at a blob that was not stored. With no image, any old one the
  * record owned is removed.
  */
 export async function saveCode(record: SavedCode, image: Blob | null): Promise<void> {
-  const key = record.center.imageKey ?? `${record.id}-image`;
+  const key = record.center.imageKey ?? imageKeyFor(record.id);
   if (image) await putImage(key, image);
   else await deleteImage(key);
   await putCode(record);

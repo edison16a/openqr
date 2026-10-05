@@ -1,3 +1,4 @@
+import { imageKeyFor } from "@/lib/storage/save";
 import type { SavedCode } from "@/lib/storage/types";
 import { currentHost, type DerivedQr } from "./derive";
 import { initialState } from "./state";
@@ -9,9 +10,6 @@ type Ready = Extract<DerivedQr, { status: "ready" }>;
 export function newRecordId(): string {
   return `qr_${Math.random().toString(36).slice(2, 8)}`;
 }
-
-/** Key of the one image a record owns. Derived from the id so it is easy to clean up. */
-export const imageKeyFor = (id: string) => `${id}-image`;
 
 /**
  * Snapshots the generator into a saved record. The center kind is the one
