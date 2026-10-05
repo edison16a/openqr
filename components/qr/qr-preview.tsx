@@ -15,9 +15,13 @@ function useUpdateAnnouncement(payload: string | null): string {
   const [message, setMessage] = useState("");
   useEffect(() => {
     if (!settled) return;
-    setMessage("QR code updated");
-    const timer = setTimeout(() => setMessage(""), 1500);
-    return () => clearTimeout(timer);
+    // Clear then set, so the live region sees a fresh change every time.
+    const show = setTimeout(() => setMessage("QR code updated"), 0);
+    const hide = setTimeout(() => setMessage(""), 1500);
+    return () => {
+      clearTimeout(show);
+      clearTimeout(hide);
+    };
   }, [settled]);
   return message;
 }
