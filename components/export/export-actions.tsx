@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { CopyIcon, DownloadIcon } from "@/components/ui/icons";
 import { useToast } from "@/components/ui/toast";
 import type { DerivedQr } from "@/lib/generator/derive";
+import { saveBlob } from "@/lib/export/download";
 import { pngFileName } from "@/lib/export/filename";
 import { renderPng } from "@/lib/qr/render-png";
 
@@ -45,12 +46,7 @@ export function ExportActions({ derived, fg, bg }: ExportActionsProps) {
     if (derived.status !== "ready") return;
     setBusy(true);
     try {
-      const url = URL.createObjectURL(await makePng());
-      const link = document.createElement("a");
-      link.href = url;
-      link.download = pngFileName(derived.title);
-      link.click();
-      setTimeout(() => URL.revokeObjectURL(url), 1000);
+      saveBlob(await makePng(), pngFileName(derived.title));
     } catch {
       toast({ message: "Could not create the PNG. Please try again." });
     } finally {
