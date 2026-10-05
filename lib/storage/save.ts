@@ -25,8 +25,8 @@ export async function loadImageFor(record: SavedCode): Promise<{ blob: Blob; dat
   return blob ? { blob, dataUrl: await blobToDataUrl(blob) } : null;
 }
 
-/** Attaches the image data URL to a record so cards can draw it. */
+/** Pairs a record with its image data URL so cards can draw it. */
 export async function withImage(record: SavedCode): Promise<LoadedCode> {
   const image = await loadImageFor(record);
-  return { ...record, imageDataUrl: image?.dataUrl ?? null };
+  return { record, imageDataUrl: image?.dataUrl ?? null };
 }

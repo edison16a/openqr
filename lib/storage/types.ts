@@ -20,6 +20,7 @@ export interface SavedCode {
 }
 
 /** A saved code with its center image loaded as a data URL, ready to draw. */
-export interface LoadedCode extends SavedCode {
+export interface LoadedCode {
+  record: SavedCode;
   imageDataUrl: string | null;
 }
