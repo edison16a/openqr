@@ -6,7 +6,7 @@ import { fail, type EncodeResult } from "../types";
  * literally, so a missed escape means a wrong network name or password.
  */
 export function escapeWifi(value: string): string {
-  return value.replace(/[\;,:"]/g, (char) => `\\${char}`);
+  return value.replace(/[\\;,:"]/g, (char) => `\\${char}`);
 }
 
 /**
