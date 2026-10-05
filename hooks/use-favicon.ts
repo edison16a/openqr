@@ -18,7 +18,9 @@ export function useFavicon(state: GeneratorState, dispatch: Dispatch<GeneratorAc
   const host = useDebounced(currentHost(state), SETTLE_MS);
   // Read through a ref so the effect only reruns when the host changes.
   const latest = useRef(state);
-  latest.current = state;
+  useEffect(() => {
+    latest.current = state;
+  });
 
   useEffect(() => {
     if (!host) return;
