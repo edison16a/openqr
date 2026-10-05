@@ -13,6 +13,16 @@ interface ShellProps {
   children: React.ReactNode;
 }
 
+/** A problem note with a warning icon. No color, so it relies on icon and weight. */
+export function InlineMessage({ id, children }: { id?: string; children: React.ReactNode }) {
+  return (
+    <p id={id} className="flex items-start gap-1.5 text-[13px] font-medium text-ink">
+      <WarningIcon size={15} className="mt-0.5 shrink-0" />
+      {children}
+    </p>
+  );
+}
+
 /** Label above, control in the middle, message below. Used by every form field. */
 export function FieldShell({ label, id, message, children }: ShellProps) {
   return (
@@ -21,12 +31,7 @@ export function FieldShell({ label, id, message, children }: ShellProps) {
         {label}
       </label>
       {children}
-      {message && (
-        <p id={`${id}-message`} className="flex items-start gap-1.5 text-[13px] font-medium text-ink">
-          <WarningIcon size={15} className="mt-0.5 shrink-0" />
-          {message}
-        </p>
-      )}
+      {message && <InlineMessage id={`${id}-message`}>{message}</InlineMessage>}
     </div>
   );
 }
