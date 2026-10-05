@@ -17,6 +17,8 @@ export interface FieldSpec {
 export interface ContentTypeSpec {
   type: ContentType;
   label: string;
+  /** Shown over the empty preview, like "Enter a link". */
+  emptyHint: string;
   fields: FieldSpec[];
   /** Starting values, one per field, so Wi-Fi security begins on WPA. */
   defaults: string[];
@@ -30,18 +32,21 @@ export const CONTENT_TYPES: ContentTypeSpec[] = [
   {
     type: "link",
     label: "Link",
+    emptyHint: "Enter a link",
     fields: [{ label: "Link", placeholder: "https://openqr.app", inputMode: "url", autoComplete: "off" }],
     defaults: [""],
   },
   {
     type: "text",
     label: "Text",
+    emptyHint: "Enter some text",
     fields: [{ label: "Text", placeholder: "Anything you want to share", multiline: true }],
     defaults: [""],
   },
   {
     type: "wifi",
     label: "Wi-Fi",
+    emptyHint: "Enter a network name",
     fields: [
       { label: "Network name", placeholder: "HomeNetwork", autoComplete: "off" },
       { label: "Password", placeholder: "Leave empty for an open network", secret: true, autoComplete: "off" },
@@ -59,6 +64,7 @@ export const CONTENT_TYPES: ContentTypeSpec[] = [
   {
     type: "contact",
     label: "Contact",
+    emptyHint: "Enter a name, phone or email",
     fields: [
       { label: "Name", placeholder: "Ada Lovelace", autoComplete: "off" },
       { label: "Phone", placeholder: "+1 555 010 0199", inputMode: "tel", autoComplete: "off" },
@@ -69,12 +75,14 @@ export const CONTENT_TYPES: ContentTypeSpec[] = [
   {
     type: "email",
     label: "Email",
+    emptyHint: "Enter an email address",
     fields: [{ label: "Address", placeholder: "hello@example.com", inputMode: "email", autoComplete: "off" }],
     defaults: [""],
   },
   {
     type: "phone",
     label: "Phone",
+    emptyHint: "Enter a phone number",
     fields: [{ label: "Number", placeholder: "+1 555 010 0199", inputMode: "tel", autoComplete: "off" }],
     defaults: [""],
   },
