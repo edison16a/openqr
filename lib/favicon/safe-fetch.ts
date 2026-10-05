@@ -10,6 +10,8 @@ export interface SafeFetchOptions {
   /** Total time budget for the whole chain of redirects, in milliseconds. */
   timeoutMs?: number;
   maxRedirects?: number;
+  /** Return what was read so far instead of failing when the cap is hit. Used for HTML. */
+  truncate?: boolean;
   /** Checked against the Content-Type header before any body is read. */
   acceptType: (contentType: string) => boolean;
 }
@@ -72,7 +74,7 @@ function requestOnce(url: URL, signal: AbortSignal): Promise<http.IncomingMessag
   });
 }
 /** Reads a body, stopping the moment it grows past the limit. */
-function readBody(res: http.IncomingMessage, maxBytes: number): Promise<Buffer> {
+function readBody(res: http.IncomingMessage, maxBytes: number, truncate: boolean): Promise<Buffer> {
   return new Promise((resolve, reject) => {
     const chunks: Buffer[] = [];
     let total = 0;
@@ -80,7 +82,9 @@ function readBody(res: http.IncomingMessage, maxBytes: number): Promise<Buffer> 
       total += chunk.length;
       if (total > maxBytes) {
         res.destroy();
-        reject(new FetchRefused("response too large"));
+        // Link tags live near the top of a page, so a cut off page is still useful.
+        if (truncate) resolve(Buffer.concat(chunks).subarray(0, maxBytes));
+        else reject(new FetchRefused("response too large"));
         return;
       }
       chunks.push(chunk);
@@ -97,7 +101,7 @@ function readBody(res: http.IncomingMessage, maxBytes: number): Promise<Buffer> 
  * size cap and a content type check before reading the body.
  */
 export async function safeFetch(start: URL, options: SafeFetchOptions): Promise<SafeFetchResult> {
-  const { maxBytes, timeoutMs = 4000, maxRedirects = 3, acceptType } = options;
+  const { maxBytes, timeoutMs = 4000, maxRedirects = 3, truncate = false, acceptType } = options;
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
@@ -121,7 +125,7 @@ export async function safeFetch(start: URL, options: SafeFetchOptions): Promise<
         res.destroy();
         throw new FetchRefused("unexpected content type");
       }
-      return { url, contentType, body: await readBody(res, maxBytes) };
+      return { url, contentType, body: await readBody(res, maxBytes, truncate) };
     }
     throw new FetchRefused("too many redirects");
   } finally {
