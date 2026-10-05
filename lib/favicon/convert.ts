@@ -1,4 +1,4 @@
-import sharp from "sharp";
+import sharp, { type Sharp } from "sharp";
 import { readIco } from "./ico";
 
 /** Every icon leaves the server as a square PNG this wide. */
@@ -22,7 +22,7 @@ export function isSafeSvg(source: string): boolean {
 }
 
 /** Fits any decoded image into a transparent 256 px square without stretching. */
-async function normalize(input: sharp.Sharp, sourceSize: number): Promise<ConvertedIcon> {
+async function normalize(input: Sharp, sourceSize: number): Promise<ConvertedIcon> {
   const png = await input
     .resize(ICON_SIZE, ICON_SIZE, { fit: "contain", background: { r: 0, g: 0, b: 0, alpha: 0 } })
     .png()
