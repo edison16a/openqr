@@ -68,12 +68,6 @@ export const TrashIcon = (p: IconProps) => (
   </Line>
 );
 
-export const CheckIcon = (p: IconProps) => (
-  <Line {...p}>
-    <path d="m5 12.5 4.5 4.5L19 7.5" />
-  </Line>
-);
-
 export const WarningIcon = (p: IconProps) => (
   <Line {...p}>
     <path d="M12 4 2.8 19.5h18.4L12 4Z" />
