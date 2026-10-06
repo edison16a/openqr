@@ -1,4 +1,4 @@
-import { CheckIcon, GlobeIcon } from "@/components/ui/icons";
+import { GlobeIcon } from "@/components/ui/icons";
 import { Tooltip } from "@/components/ui/tooltip";
 import type { FaviconTile as FaviconTileState } from "@/lib/generator/derive";
 import { CenterTile } from "./center-tile";
@@ -29,14 +29,9 @@ export function FaviconTile({ tile, selected, onSelect }: FaviconTileProps) {
           {tile.status === "loading" ? (
             <span className="skeleton size-7 rounded-lg bg-line" aria-hidden="true" />
           ) : tile.status === "found" && tile.image ? (
-            <span className="relative">
-              {/* A data URL we made ourselves, so next/image has nothing to optimize. */}
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img src={tile.image.dataUrl} alt="" className="size-7 rounded-lg object-contain" />
-              <span className="absolute -right-1.5 -top-1.5 flex size-4 items-center justify-center rounded-full bg-accent text-white">
-                <CheckIcon size={11} strokeWidth={3} />
-              </span>
-            </span>
+            // A data URL we made ourselves, so next/image has nothing to optimize.
+            // eslint-disable-next-line @next/next/no-img-element
+            <img src={tile.image.dataUrl} alt="" className="size-7 rounded-lg object-contain" />
           ) : (
             <GlobeIcon size={24} className="text-muted" />
           )}
