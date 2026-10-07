@@ -42,7 +42,7 @@ export function SavedCard({ code, onDelete }: SavedCardProps) {
 
   return (
     <li className="flex flex-col gap-4 rounded-card bg-surface p-3">
-      <div className="aspect-square overflow-hidden rounded-frame border border-line">
+      <div className="aspect-square overflow-hidden rounded-frame">
         <QrSvg
           geometry={geometry}
           fg={record.colors.fg}
