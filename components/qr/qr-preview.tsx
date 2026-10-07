@@ -36,7 +36,7 @@ export function QrPreview({ state, derived }: { state: GeneratorState; derived: 
 
   return (
     <div className="flex w-full flex-col items-center gap-4">
-      <div className="aspect-square w-full max-w-[380px] overflow-hidden min-[1088px]:max-w-[440px] rounded-frame border border-line bg-surface">
+      <div className="aspect-square w-full max-w-[380px] overflow-hidden min-[1088px]:max-w-[440px] rounded-frame bg-surface">
         {derived.status === "ready" ? (
           <QrSvg
             geometry={derived.geometry}
