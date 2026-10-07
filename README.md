@@ -6,6 +6,8 @@
 
 <p align="center">
   A free, no-account QR code generator with your own image in the middle.
+  <br>
+  <a href="https://openqrgen.vercel.app">openqrgen.vercel.app</a>
 </p>
 
 <p align="center">
